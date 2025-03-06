@@ -25,10 +25,10 @@ Operation will be performed manually in the main method to test POC.
 ## Things to do later... or never
 
 ### MVP Goals
--[x] Spell check 10 note cards 2/28 done 3/5
--[x] Elaborate the back (answer) portion of 10 note cards 2/28 done 3/5
--[ ] Update 10 note cards in Anki after AI operations 2/28
--[ ] Perform the above on a 300 card deck 2/28
+- [x] Spell check 10 note cards 2/28 done 3/5
+- [x] Elaborate the back (answer) portion of 10 note cards 2/28 done 3/5
+- [ ] Update 10 note cards in Anki after AI operations 2/28
+- [ ] Perform the above on a 300 card deck 2/28
 
 ### Random issues or todos
 - [ ] Can I add swagger to this?
