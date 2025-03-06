@@ -6,7 +6,21 @@ if it can:
 * spell check & clean up grammar on cards
 * expand on a cards answer (back) if the LLM deems it lacking
 
-My initial goal is to set up basic services for Anki operation and communicating with an AI LLM. 
+My initial goal is to set up basic services for Anki operation and communicating with an AI LLM. The end goal
+is to be able to process my personal 300 card coding study deck.
+
+## Dependencies / Tech
+- Anki Desktop Windows Version - 23.10.1
+- Anki plug-in ~ AnkiConnect
+- Java 21
+- Spring Boot Starter Web
+- Lombok - 1.18.30 ~ Might be able to upgrade. Do not want to risk breaking MapStruct
+- MapStruct - 1.6.0
+- Lombok-MapStruct-Binding - 0.2.0
+- IDE plug-in ~ MapStruct Support
+- IDE plug-in ~ Lombok
+---
+## Project Planning
 
 ### AnkiService
 Is responsible for interfacing with Anki via the Anki Connect plug-in [docs here](https://git.sr.ht/~foosoft/anki-connect). This  service 
@@ -20,9 +34,16 @@ This is my first time working with a LLM via API. Currently, I believe this serv
 
 Whatever methods this service offers should be generic in nature so the client can be changed to say OpenAi's API without issue.
 
-Operation will be performed manually in the main method to test POC.
+Operations will be performed manually in the main method to test POC.
 
-## Things to do later... or never
+### NoteCardProcessorService
+
+### NoteCardController  
+
+
+
+---
+## Current Status
 
 ### MVP Goals
 - [x] Spell check 10 note cards 2/28 done 3/5
@@ -38,6 +59,22 @@ Operation will be performed manually in the main method to test POC.
 - [x] swap all classes to use lombok 2/28 done 3/5
 - [ ] look into OpenAi's API contract. see if it differs much from Grok and Claude. Is the current generic class... generic enough. 2/28
 - [ ] add constants (should have added more context forgot what this was for :) )
+
+---
+## Configuration
+
+### Setup
+
+#### Anki - AnkiConnect
+
+#### API Keys & Secrets
+In your `application.properties` file add the following.
+```
+xapi.apikey="you-api-key"
+xapi.url =https://api.x.ai/v1/chat/completions
+```
+
+---
 
 ## Lesson Learned:
 
