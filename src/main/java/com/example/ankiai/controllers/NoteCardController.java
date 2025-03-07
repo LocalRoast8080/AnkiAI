@@ -7,9 +7,6 @@ import com.example.ankiai.services.NoteCardProcessorService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-/**
- *
- */
 @RestController
 public class NoteCardController {
 
@@ -21,21 +18,11 @@ public class NoteCardController {
         this.ankiService = ankiService;
     }
 
-    /**
-     *
-     * @return
-     */
     @GetMapping("/deckNames")
     public List<AnkiDeck> getDeckNames(){
         return ankiService.getDecks();
     }
 
-    /**
-     *
-     * @param deckName
-     * @param noteCardLimit
-     * @return
-     */
     @GetMapping("/noteCards")
     public List<AnkiNoteCard> getNoteCards(@RequestParam("deckName") String deckName, @RequestParam("noteCardLimit") int noteCardLimit){
         var decks = ankiService.getDecks();
@@ -45,11 +32,6 @@ public class NoteCardController {
         return noteCardProcessorService.getNoteCards(deckName, noteCardLimit);
     }
 
-    /**
-     *
-     * @param noteCards
-     * @return
-     */
     @PatchMapping("/updateNoteCard")
     public List<AnkiNoteCard> patchNoteCards(@RequestBody List<AnkiNoteCard> noteCards){
         throw new UnsupportedOperationException();
