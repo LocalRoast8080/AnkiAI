@@ -11,14 +11,5 @@ import org.springframework.context.ApplicationContext;
 @EnableConfigurationProperties(XAiConfigProperties.class)
 public class AnkiAiApplication {
 
-	public static void main(String[] args) {
-		ApplicationContext context = SpringApplication.run(AnkiAiApplication.class, args);
-		NoteCardProcessorService noteService = context.getBean(NoteCardProcessorService.class);
-
-//		var noteCards = noteService.getNoteCards("AppTesting", 100);
-//		var spellCheckedCards = noteService.spellCheck(noteCards);
-//		var expandedCards = noteService.expandAnswers(spellCheckedCards);
-//
-//		System.out.println(expandedCards.toString());
-	}
+    public static void main(String[] args) { SpringApplication.run(AnkiAiApplication.class, args);}
 }
