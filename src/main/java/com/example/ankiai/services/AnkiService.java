@@ -148,33 +148,36 @@ public class AnkiService {
         }
     }
 
-    // https://git.sr.ht/~foosoft/anki-connect#codeupdatenotefieldscode
-//    public AnkiNoteCard updateNote(AnkiNoteCardFull note) {
-//        var action = new AnkiAction("updateNoteFields");
-//
-//        Map<String, Object> params = new HashMap<>();
-//        params.put("note", note);
-//        action.setParams(params);
-//
-//        var res = ankiClient.post()
-//                .uri("")
-//                .body(action.toJsonString())
-//                .retrieve()
-//                .body(String.class);
-//
-//        try {
-//            var note = mapper.readValue(res)
-//
-//            if (ankiRes.getError() != null) {
-//                throw new RuntimeException(ankiRes.getError());
-//            }
-//
-//            return ankiRes.getResult();
-//
-//        } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+    // https://git.sr.ht/~foosoft/anki-connect#codeupdatenotefieldscode Docs, add to interface later
+    public AnkiNoteCard updateNote(AnkiNoteCard note) {
+        AnkiNoteUpdateReq updateModel = ankiMapper.mapToAnkiNoteReq(note);
+
+        var action = new AnkiAction("updateNoteFields");
+        Map<String, Object> params = new HashMap<>();
+
+        params.put("note", updateModel);
+        action.setParams(params);
+
+        var res = ankiClient.post()
+                .uri("")
+                .body(action.toJsonString())
+                .retrieve()
+                .body(String.class);
+
+        try {
+            AnkiResponse<String> ankiRes = mapper.readValue(res, new TypeReference<AnkiResponse<String>>() {});
+
+            if (ankiRes.getError() != null) {
+                throw new RuntimeException(ankiRes.getError());
+            }
+
+            // AnkiConnect Returns Null on 200. Returning model to simulate success. This will be wrapped at a later time.
+            return note;
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public String createNoteCard() {
         throw new UnsupportedOperationException("This method is not implemented yet");

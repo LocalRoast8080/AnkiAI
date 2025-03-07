@@ -38,7 +38,7 @@ public class NoteCardController {
     }
 
     @PatchMapping("/updateNoteCard")
-    public List<AnkiNoteCard> patchNoteCards(@RequestBody List<AnkiNoteCard> noteCards){
-        throw new UnsupportedOperationException();
+    public AnkiNoteCard updateNoteCard(@RequestBody AnkiNoteCard noteCard){
+        return ankiService.updateNote(noteCard);
     }
 }

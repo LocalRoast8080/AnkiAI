@@ -62,16 +62,16 @@ Operations will be performed manually in the main method to test POC.
 | NoteProcessor Unit Testing       |    3/7     | Pending |                |                                                      |
 
 ### Issues and Todos:
-| Task Description                         | Target Date | Status   | Notes                                                               |
-|------------------------------------------|-------------|----------|---------------------------------------------------------------------|
-| Explore Swagger for API documentation    | 3/5         | Pending  | Docs [here](https://springdoc.org/#getting-started)                 |
-| Debug RestClient object parsing issue    | 2/28        | Pending  | Fix body serialization (.Body(Object)). Would always populate null. |
-| Add HTTP code catches in clients         | 2/28        | Pending  | If there is an http issue the code will break                       |
-| Build interfaces for testing and mocking | 2/28        | Pending  | For unit tests                                                      |
-| Swap all classes to use Lombok           | 2/28        | Done 3/7 | Reduced boilerplate                                                 |
-| Look into OpenAI’s API contract          | 2/28        | Pending  | Compare with Grok, Claude                                           |
-| Add constants (context unclear, revisit) | 2/28        | Pending  | Clarify purpose                                                     |
-|                                          |             |          |                                                                     |
+| Task Description                                                       | Target Date | Status   | Notes                                                               |
+|------------------------------------------------------------------------|-------------|----------|---------------------------------------------------------------------|
+| Explore Swagger for API documentation                                  | 3/5         | Pending  | Docs [here](https://springdoc.org/#getting-started)                 |
+| Debug RestClient object parsing issue                                  | 2/28        | Pending  | Fix body serialization (.Body(Object)). Would always populate null. |
+| Add HTTP code catches in clients                                       | 2/28        | Pending  | If there is an http issue the code will break                       |
+| Build interfaces for testing and mocking                               | 2/28        | Pending  | For unit tests                                                      |
+| Swap all classes to use Lombok                                         | 2/28        | Done 3/7 | Reduced boilerplate                                                 |
+| Look into OpenAI’s API contract                                        | 2/28        | Pending  | Compare with Grok, Claude                                           |
+| Add constants (context unclear, revisit)                               | 2/28        | Pending  | Clarify purpose                                                     |
+| Had issues using nested classes with mapStruct, broke them out instead | 3/7         | Pending  | This should be possible. Didn't want to waste more time for now.    |
 
 ---
 ## Configuration
