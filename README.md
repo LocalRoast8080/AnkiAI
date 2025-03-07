@@ -56,7 +56,7 @@ Operations will be performed manually in the main method to test POC.
 ### Stretch Goals
 | Task Description                 | Date Added | Status  | Date Completed | Notes                                                |
 |:---------------------------------|:----------:|:-------:|:---------------|:-----------------------------------------------------|
-| AnkiNote Controller Service      |    3/7     | Pending |                | Complete AnkiNote Controller/Service CRUD logic      |
+| AnkiNote Controller Service      |    3/7     | Done |       3/7         | Complete AnkiNote Controller/Service CRUD logic      |
 | NoteProcessor Controller Service |    3/7     | Pending |                | Complete NoteProcessor Controller/Service CRUD logic |
 | AnkiNote Unit Testing            |    3/7     | Pending |                | Testing Last  :grin:                                 |
 | NoteProcessor Unit Testing       |    3/7     | Pending |                |                                                      |
