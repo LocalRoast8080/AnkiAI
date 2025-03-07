@@ -64,7 +64,7 @@ Operations will be performed manually in the main method to test POC.
 ### Issues and Todos:
 | Task Description                                                       | Target Date | Status   | Notes                                                               |
 |------------------------------------------------------------------------|-------------|----------|---------------------------------------------------------------------|
-| Explore Swagger for API documentation                                  | 3/5         | Pending  | Docs [here](https://springdoc.org/#getting-started)                 |
+| Explore Swagger for API documentation                                  | 3/5         | Done 3/7  | Docs [here](https://springdoc.org/#getting-started)                 |
 | Debug RestClient object parsing issue                                  | 2/28        | Pending  | Fix body serialization (.Body(Object)). Would always populate null. |
 | Add HTTP code catches in clients                                       | 2/28        | Pending  | If there is an http issue the code will break                       |
 | Build interfaces for testing and mocking                               | 2/28        | Pending  | For unit tests                                                      |
