@@ -27,10 +27,6 @@ public class AnkiService {
         this.ankiMapper = ankiMapper;
     }
 
-    // still need to add error code handeling
-    // create resopnse wrapper class
-    // probs make a method to wrap action builder
-
     public List<AnkiDeck> getDecks() {
         AnkiAction action = new AnkiAction("deckNames");
 
@@ -124,16 +120,11 @@ public class AnkiService {
         }
     }
 
-    /*
-    how should updaint a card work?
-    tags can be assined if they do not exist
-    no ignore tags for now
-     */
-    public String updateNote(AnkiNoteCardFull note) {
-        var action = new AnkiAction("updateNoteFields");
+    public List<Long> getNoteCardIds(String deckName, int limit) {
+        AnkiAction action = new AnkiAction("findNotes");
 
         Map<String, Object> params = new HashMap<>();
-        params.put("note", note);
+        params.put("query", "deck:" + deckName);
         action.setParams(params);
 
         var res = ankiClient.post()
@@ -142,8 +133,48 @@ public class AnkiService {
                 .retrieve()
                 .body(String.class);
 
-        return res;
+        try {
+            AnkiResponse<List<Long>> ankiRes = mapper.readValue(res, new TypeReference<AnkiResponse<List<Long>>>() {});
+
+            if (ankiRes.getError() != null) {
+                throw new RuntimeException(ankiRes.getError());
+            }
+
+            var limitedIds = ankiRes.getResult();
+
+            return ankiRes.getResult().subList(0,Math.min(limitedIds.size(), limit));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    // https://git.sr.ht/~foosoft/anki-connect#codeupdatenotefieldscode
+//    public AnkiNoteCard updateNote(AnkiNoteCardFull note) {
+//        var action = new AnkiAction("updateNoteFields");
+//
+//        Map<String, Object> params = new HashMap<>();
+//        params.put("note", note);
+//        action.setParams(params);
+//
+//        var res = ankiClient.post()
+//                .uri("")
+//                .body(action.toJsonString())
+//                .retrieve()
+//                .body(String.class);
+//
+//        try {
+//            var note = mapper.readValue(res)
+//
+//            if (ankiRes.getError() != null) {
+//                throw new RuntimeException(ankiRes.getError());
+//            }
+//
+//            return ankiRes.getResult();
+//
+//        } catch (JsonProcessingException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     public String createNoteCard() {
         throw new UnsupportedOperationException("This method is not implemented yet");

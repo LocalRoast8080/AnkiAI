@@ -23,6 +23,11 @@ public class NoteCardController {
         return ankiService.getDecks();
     }
 
+    @GetMapping("/noteIds")
+    public List<Long> getNoteIds(@RequestParam("deckName") String deckName, @RequestParam("noteIdLimit") int noteIdLimit){
+        return ankiService.getNoteCardIds(deckName, noteIdLimit);
+    }
+
     @GetMapping("/noteCards")
     public List<AnkiNoteCard> getNoteCards(@RequestParam("deckName") String deckName, @RequestParam("noteCardLimit") int noteCardLimit){
         var decks = ankiService.getDecks();
