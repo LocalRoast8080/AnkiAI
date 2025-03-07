@@ -1,7 +1,6 @@
 package com.example.ankiai.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,9 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AnkiNoteCardFull {
-    @JsonProperty("noteId")
-    private long noteId;
-    @JsonProperty("fields")
-    private AnkiNoteFields fields;
+public class AnkiNoteUpdateReq {
+    public long id;
+    public AnkiNoteFields fields;
 }

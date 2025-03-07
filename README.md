@@ -6,7 +6,21 @@ if it can:
 * spell check & clean up grammar on cards
 * expand on a cards answer (back) if the LLM deems it lacking
 
-My initial goal is to set up basic services for Anki operation and communicating with an AI LLM. 
+My initial goal is to set up basic services for Anki operation and communicating with an AI LLM. The end goal
+is to be able to process my personal 300 card coding study deck.
+
+## Dependencies / Tech
+- Anki Desktop Windows Version - 23.10.1
+- Anki plug-in ~ AnkiConnect
+- Java 21
+- Spring Boot Starter Web
+- Lombok - 1.18.30 ~ Might be able to upgrade. Do not want to risk breaking MapStruct
+- MapStruct - 1.6.0
+- Lombok-MapStruct-Binding - 0.2.0
+- IDE plug-in ~ MapStruct Support
+- IDE plug-in ~ Lombok
+---
+## Project Planning
 
 ### AnkiService
 Is responsible for interfacing with Anki via the Anki Connect plug-in [docs here](https://git.sr.ht/~foosoft/anki-connect). This  service 
@@ -20,24 +34,60 @@ This is my first time working with a LLM via API. Currently, I believe this serv
 
 Whatever methods this service offers should be generic in nature so the client can be changed to say OpenAi's API without issue.
 
-Operation will be performed manually in the main method to test POC.
+Operations will be performed manually in the main method to test POC.
 
-## Things to do later... or never
+### NoteCardProcessorService
 
-### MVP Goals
-- [x] Spell check 10 note cards 2/28 done 3/5
-- [x] Elaborate the back (answer) portion of 10 note cards 2/28 done 3/5
-- [ ] Update 10 note cards in Anki after AI operations 2/28
-- [ ] Perform the above on a 300 card deck 2/28
+### NoteCardController  
 
-### Random issues or todos
-- [ ] Can I add swagger to this?
-- [ ] RestClient does not want to parse my objects on the post body -> .Body(Object) posts nothing
-- [ ] add http code catches in the clients 2/28
-- [ ] interfaces need to be built out for testing and mocking 2/28
-- [x] swap all classes to use lombok 2/28 done 3/5
-- [ ] look into OpenAi's API contract. see if it differs much from Grok and Claude. Is the current generic class... generic enough. 2/28
-- [ ] add constants (should have added more context forgot what this was for :) )
+
+
+---
+## Current Status
+
+### MVP:
+| Task Description                                            | Date Added | Status  | Date Completed | Notes |
+|:------------------------------------------------------------|:----------:|:-------:|:---------------|:------|
+| Spell check 10 note cards 2/28 done                         |    2/28    |  Done   | 3/5            |
+| Expand the back (answer) portion of 10 note cards 2/28 done |    2/28    |  Done   | 3/5            |
+| Update 10 note cards in Anki after AI operations            |    2/28    | Pending |                |
+| Perform the above on a 300 card deck 2/28                   |    2/28    | Pending |                |
+
+### Stretch Goals
+| Task Description                 | Date Added | Status  | Date Completed | Notes                                                |
+|:---------------------------------|:----------:|:-------:|:---------------|:-----------------------------------------------------|
+| AnkiNote Controller Service      |    3/7     | Pending |                | Complete AnkiNote Controller/Service CRUD logic      |
+| NoteProcessor Controller Service |    3/7     | Pending |                | Complete NoteProcessor Controller/Service CRUD logic |
+| AnkiNote Unit Testing            |    3/7     | Pending |                | Testing Last  :grin:                                 |
+| NoteProcessor Unit Testing       |    3/7     | Pending |                |                                                      |
+
+### Issues and Todos:
+| Task Description                                                       | Target Date | Status   | Notes                                                               |
+|------------------------------------------------------------------------|-------------|----------|---------------------------------------------------------------------|
+| Explore Swagger for API documentation                                  | 3/5         | Pending  | Docs [here](https://springdoc.org/#getting-started)                 |
+| Debug RestClient object parsing issue                                  | 2/28        | Pending  | Fix body serialization (.Body(Object)). Would always populate null. |
+| Add HTTP code catches in clients                                       | 2/28        | Pending  | If there is an http issue the code will break                       |
+| Build interfaces for testing and mocking                               | 2/28        | Pending  | For unit tests                                                      |
+| Swap all classes to use Lombok                                         | 2/28        | Done 3/7 | Reduced boilerplate                                                 |
+| Look into OpenAI’s API contract                                        | 2/28        | Pending  | Compare with Grok, Claude                                           |
+| Add constants (context unclear, revisit)                               | 2/28        | Pending  | Clarify purpose                                                     |
+| Had issues using nested classes with mapStruct, broke them out instead | 3/7         | Pending  | This should be possible. Didn't want to waste more time for now.    |
+
+---
+## Configuration
+
+### Setup
+
+#### Anki - AnkiConnect
+
+#### API Keys & Secrets
+In your `application.properties` file add the following.
+```
+xapi.apikey="you-api-key"
+xapi.url =https://api.x.ai/v1/chat/completions
+```
+
+---
 
 ## Lesson Learned:
 
