@@ -27,7 +27,7 @@ public class NoteCardProcessorService {
     }
 
     public List<AnkiNoteCard> getNoteCards(String deckName, int noteCardLimit){
-        var allNotesIds = ankiService.getAllNotesIds(deckName);
+        var allNotesIds = ankiService.getAllNoteCardIds(deckName);
 
         // TODO add error to response wrapper. Null here could imply invalid deck name or it doesnt not exists
         if(  allNotesIds == null ||allNotesIds.isEmpty()){return null;}
@@ -35,7 +35,7 @@ public class NoteCardProcessorService {
         // TODO should i let the user add a number too large and auto correct?
         var noteIds = allNotesIds.subList(0, Math.min(noteCardLimit, allNotesIds.size()));
 
-        return ankiService.getNoteInfo(noteIds);
+        return ankiService.getNoteCards(noteIds);
     }
 
     public List<AnkiNoteCard> spellCheck(List<AnkiNoteCard> noteCards) {

@@ -16,7 +16,7 @@ public class XAiService {
 
     private final RestClient grokClient;
 
-    // Should this be here?
+    // Should this be here? 3/6 I think not. If I ever want to change AI provider these are stuck here.
     private final String spellCheckPrompt = "perform spell-checking and grammatical corrections on the 'front' and 'back' fields";
     private final String expandAnswerPrompt = "If a card's 'back' is sparse or lacks detail, expand it with relevant, accurate information while maintaining clarity." +
                                               "If the 'back' warrants a one word response do not add more information";

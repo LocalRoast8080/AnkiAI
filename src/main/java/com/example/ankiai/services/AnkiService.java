@@ -2,14 +2,10 @@ package com.example.ankiai.services;
 
 import com.example.ankiai.configuration.XAiConfigProperties;
 import com.example.ankiai.mappers.AnkiNoteCardMapper;
-import com.example.ankiai.models.AnkiAction;
-import com.example.ankiai.models.AnkiNoteCard;
-import com.example.ankiai.models.AnkiNoteCardFull;
-import com.example.ankiai.models.AnkiResponse;
+import com.example.ankiai.models.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.el.MethodNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -35,17 +31,26 @@ public class AnkiService {
     // create resopnse wrapper class
     // probs make a method to wrap action builder
 
-    public String getDecks() {
+    public List<AnkiDeck> getDecks() {
         AnkiAction action = new AnkiAction("deckNames");
 
-        return ankiClient.post()
+        var res = ankiClient.post()
                 .uri("/")
                 .body(action.toJsonString())
                 .retrieve()
                 .body(String.class);
+
+        try {
+            AnkiResponse<List<AnkiDeck>> response = mapper.readValue(res, new TypeReference<AnkiResponse<List<AnkiDeck>>>() {
+            });
+            return response.result;
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public AnkiNoteCard getNoteInfo(long noteId) {
+    public AnkiNoteCard getNoteCards(long noteId) {
         AnkiAction action = new AnkiAction("notesInfo");
 
         Map<String, Object> params = new HashMap<>();
@@ -58,8 +63,8 @@ public class AnkiService {
                 .retrieve()
                 .body(String.class);
 
-        try{
-            AnkiResponse<List<AnkiNoteCardFull>> response = mapper.readValue(res, new TypeReference<AnkiResponse<List<AnkiNoteCardFull>>>() {} );
+        try {
+            AnkiResponse<List<AnkiNoteCardFull>> response = mapper.readValue(res, new TypeReference<AnkiResponse<List<AnkiNoteCardFull>>>() {});
             var note = ankiMapper.mapToAnkiNoteCards(response.result);
             return note.getFirst();
 
@@ -68,11 +73,12 @@ public class AnkiService {
         }
     }
 
-    public List<AnkiNoteCard> getNoteInfo(List<Long> noteIds) {
+    public List<AnkiNoteCard> getNoteCards(List<Long> noteCardIds) {
+
         AnkiAction action = new AnkiAction("notesInfo");
 
         Map<String, Object> params = new HashMap<>();
-        params.put("notes", noteIds);
+        params.put("notes", noteCardIds);
         action.setParams(params);
 
         var res = ankiClient.post()
@@ -81,8 +87,8 @@ public class AnkiService {
                 .retrieve()
                 .body(String.class);
 
-        try{
-            AnkiResponse<List<AnkiNoteCardFull>> response = mapper.readValue(res, new TypeReference<AnkiResponse<List<AnkiNoteCardFull>>>() {} );
+        try {
+            AnkiResponse<List<AnkiNoteCardFull>> response = mapper.readValue(res, new TypeReference<AnkiResponse<List<AnkiNoteCardFull>>>() {});
             var notes = ankiMapper.mapToAnkiNoteCards(response.result);
             return notes;
 
@@ -91,7 +97,7 @@ public class AnkiService {
         }
     }
 
-    public List<Long> getAllNotesIds(String deckName) {
+    public List<Long> getAllNoteCardIds(String deckName) {
         AnkiAction action = new AnkiAction("findNotes");
 
         Map<String, Object> params = new HashMap<>();
@@ -105,11 +111,7 @@ public class AnkiService {
                 .body(String.class);
 
         try {
-            AnkiResponse<List<Long>> ankiRes = mapper.readValue(
-                    res,
-                    new TypeReference<AnkiResponse<List<Long>>>() {
-                    }
-            );
+            AnkiResponse<List<Long>> ankiRes = mapper.readValue(res, new TypeReference<AnkiResponse<List<Long>>>() {});
 
             if (ankiRes.getError() != null) {
                 throw new RuntimeException(ankiRes.getError());
@@ -127,7 +129,7 @@ public class AnkiService {
     tags can be assined if they do not exist
     no ignore tags for now
      */
-    public String updateNote(AnkiNoteCardFull note){
+    public String updateNote(AnkiNoteCardFull note) {
         var action = new AnkiAction("updateNoteFields");
 
         Map<String, Object> params = new HashMap<>();
@@ -143,7 +145,7 @@ public class AnkiService {
         return res;
     }
 
-    public String createNoteCard(){
+    public String createNoteCard() {
         throw new UnsupportedOperationException("This method is not implemented yet");
     }
 }
