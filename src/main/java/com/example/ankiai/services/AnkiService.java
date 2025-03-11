@@ -25,6 +25,7 @@ public class AnkiService implements IAnkiService {
         this.ankiMapper = ankiMapper;
     }
 
+    // add anki response that returns  result T or String Error
     public List<AnkiDeck> getDecks() {
         AnkiAction action = new AnkiAction("deckNames");
 

@@ -20,6 +20,7 @@ public class NoteCardController implements INoteCardController {
         this.ankiService = ankiService;
     }
 
+    // TODO what is response entity? is this the wrapper I have been wanting to make myself?
     @GetMapping("/deckNames")
     public List<AnkiDeck> getDeckNames() {
         return ankiService.getDecks();
