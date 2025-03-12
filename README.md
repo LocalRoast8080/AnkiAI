@@ -25,32 +25,6 @@ is to be able to process my personal 300 card coding study deck.
 
 ---
 
-## Project Planning
-
-### AnkiService
-
-Is responsible for interfacing with Anki via the Anki Connect
-plug-in [docs here](https://git.sr.ht/~foosoft/anki-connect). This service
-should offer basic CRUD operation for [Notes](https://docs.ankiweb.net/getting-started.html#notes--fields) and methods
-to
-get deck names.
-
-### AiService
-
-Responsible for communication with an AI model, currently [Grok](https://docs.x.ai/docs/api-reference#chat-completions).
-This is my first time working with a LLM via API. Currently, I believe this service only needs to send messages via the
-client.
-
-Whatever methods this service offers should be generic in nature so the client can be changed to say OpenAi's API
-without issue.
-
-Operations will be performed manually in the main method to test POC.
-
-### NoteCardProcessorService
-
-### NoteCardController
-
----
 
 ## Current Status
 
@@ -74,18 +48,21 @@ Operations will be performed manually in the main method to test POC.
 
 ### Issues and Todos:
 
-| Task Description                                                       | Target Date | Status   | Notes                                                                                                                              |
-|------------------------------------------------------------------------|-------------|----------|------------------------------------------------------------------------------------------------------------------------------------|
-| Explore Swagger for API documentation                                  | 3/5         | Done 3/7 | Docs [here](https://springdoc.org/#getting-started)                                                                                |
-| Debug RestClient object parsing issue                                  | 2/28        | Pending  | Fix body serialization (.Body(Object)). Would always populate null.                                                                |
-| Add HTTP code catches in clients                                       | 2/28        | Pending  | If there is an http issue the code will break                                                                                      |
-| Build interfaces for testing and mocking                               | 2/28        | Pending  | For unit tests                                                                                                                     |
-| Swap all classes to use Lombok                                         | 2/28        | Done 3/7 | Reduced boilerplate                                                                                                                |
-| Look into OpenAI’s API contract                                        | 2/28        | Pending  | Compare with Grok, Claude                                                                                                          |
-| Add constants (context unclear, revisit)                               | 2/28        | Pending  | Clarify purpose                                                                                                                    |
-| Had issues using nested classes with mapStruct, broke them out instead | 3/7         | Pending  | This should be possible. Didn't want to waste more time for now.                                                                   |
-| Input models vs Service Models?                                        | 3/9         | Pending  | Should I make entity for my service and move models to controller. Seems like unnecessary work atm                                 |
+| Task Description                                                       | Target Date | Status   | Notes                                                                                                                                                               |
+|------------------------------------------------------------------------|-------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Explore Swagger for API documentation                                  | 3/5         | Done 3/7 | Docs [here](https://springdoc.org/#getting-started)                                                                                                                 |
+| Debug RestClient object parsing issue                                  | 2/28        | Pending  | Fix body serialization (.Body(Object)). Would always populate null.                                                                                                 |
+| Add HTTP code catches in clients                                       | 2/28        | Pending  | If there is an http issue the code will break                                                                                                                       |
+| Build interfaces for testing and mocking                               | 2/28        | Pending  | For unit tests                                                                                                                                                      |
+| Swap all classes to use Lombok                                         | 2/28        | Done 3/7 | Reduced boilerplate                                                                                                                                                 |
+| Look into OpenAI’s API contract                                        | 2/28        | Pending  | Compare with Grok, Claude                                                                                                                                           |
+| Add constants (context unclear, revisit)                               | 2/28        | Pending  | Clarify purpose                                                                                                                                                     |
+| Had issues using nested classes with mapStruct, broke them out instead | 3/7         | Pending  | This should be possible. Didn't want to waste more time for now.                                                                                                    |
+| Input models vs Service Models?                                        | 3/9         | Pending  | Should I make entity for my service and move models to controller. Seems like unnecessary work atm                                                                  |
 | Add Validator                                                          | 3/9         | Pending  | Don't need this now but [here](https://docs.spring.io/spring-framework/reference/core/validation/beanvalidation.html#validation-beanvalidation-spring) are the docs |
+| Endpoint to Suggest ten new cards                                      | 3/12        | Pending  | Endpoint scans deck and suggests 10 cards                                                                                                                           |
+| Ask AI generic thing have it generate Cards                            | 3/12        | Pending  | Can ask: What are the logging levels. It makes the cards                                                                                                            |
+| Tracing?                                                               | 3/12        | Pending  | Should look into. I have never implemented tracing.                                                                                                                 |
 
 ---
 

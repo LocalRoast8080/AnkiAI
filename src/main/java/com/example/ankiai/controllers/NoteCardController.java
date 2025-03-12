@@ -1,49 +1,67 @@
 package com.example.ankiai.controllers;
 
-import com.example.ankiai.interfaces.INoteCardController;
 import com.example.ankiai.models.AnkiDeck;
 import com.example.ankiai.models.AnkiNoteCard;
 import com.example.ankiai.services.AnkiService;
 import com.example.ankiai.services.NoteCardProcessorService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
-public class NoteCardController implements INoteCardController {
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/note")
+public class NoteCardController {
 
     private final NoteCardProcessorService noteCardProcessorService;
     private final AnkiService ankiService;
 
-    public NoteCardController(NoteCardProcessorService ncpService, AnkiService ankiService) {
-        this.noteCardProcessorService = ncpService;
-        this.ankiService = ankiService;
-    }
-
-    // TODO what is response entity? is this the wrapper I have been wanting to make myself?
     @GetMapping("/deckNames")
-    public List<AnkiDeck> getDeckNames() {
-        return ankiService.getDecks();
+    public ResponseEntity<List<AnkiDeck>> getDeckNames() {
+        var res = ankiService.getDecks();
+        if (res.isEmpty()) {
+            // Think I still need a wrapper to return a message.
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok().body(res);
     }
 
     @GetMapping("/noteIds")
-    public List<Long> getNoteIds(@RequestParam("deckName") String deckName, @RequestParam("noteIdLimit") int noteIdLimit) {
-        return ankiService.getNoteCardIds(deckName, noteIdLimit);
+    public ResponseEntity<List<Long>> getNoteCardIds(@RequestParam("deckName") String deckName, @RequestParam("noteIdLimit") int noteIdLimit) {
+        var res = ankiService.getNoteCardIds(deckName, noteIdLimit);
+        if (res.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(res);
     }
 
     @GetMapping("/noteCards")
-    public List<AnkiNoteCard> getNoteCards(@RequestParam("deckName") String deckName, @RequestParam("noteCardLimit") int noteCardLimit) {
-        var decks = ankiService.getDecks();
-        var deck = new AnkiDeck(deckName);
-        if (!decks.contains(deck)) {
-            return null;
+    public ResponseEntity<List<AnkiNoteCard>> getNoteCards(@RequestBody List<Long> noteCardIds) {
+        if (noteCardIds.isEmpty()) {
+            return ResponseEntity.badRequest().build();
         }
 
-        return noteCardProcessorService.getNoteCards(deckName, noteCardLimit);
+        var res = ankiService.getNoteCards(noteCardIds);
+        if (res.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok().body(res);
     }
 
     @PatchMapping("/updateNoteCard")
-    public AnkiNoteCard updateNoteCard(@RequestBody AnkiNoteCard noteCard) {
-        return ankiService.updateNote(noteCard);
+    public ResponseEntity<AnkiNoteCard> updateNoteCard(@RequestBody AnkiNoteCard noteCard) {
+        var res = ankiService.updateNote(noteCard);
+        if (res == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok().body(res);
     }
 }
