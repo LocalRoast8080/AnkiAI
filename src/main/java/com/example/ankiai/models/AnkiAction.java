@@ -29,7 +29,7 @@ public class AnkiAction {
             return objectMapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {
             log.error("Failed to process JSON: {}", e.getMessage(), e);
-            // This doesnt see right
+            // This doesn't seem right. I need some wrapper class, so I can bubble up errors or at least handle them.
             return "";
         }
     }
