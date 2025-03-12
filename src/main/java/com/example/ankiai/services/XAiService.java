@@ -3,6 +3,7 @@ package com.example.ankiai.services;
 import com.example.ankiai.models.AiMessageRequest;
 import com.example.ankiai.models.AiResponseMessage;
 import com.example.ankiai.models.AnkiNoteCard;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
+@Slf4j
 @Service
 public class XAiService {
 
@@ -37,18 +39,12 @@ public class XAiService {
         var prompt = createPrompt(expandAnswerPrompt);
         var req = new AiMessageRequest(prompt, notes.toString());
 
-        // Convert the string to note cards or Ai response
-        try {
-            return grokClient.post()
-                    .uri("")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(req)
-                    .retrieve()
-                    .body(AiResponseMessage.class);
-        } catch (HttpClientErrorException e) {
-            System.err.println(e.getResponseBodyAsString());
-            throw e;
-        }
+        return grokClient.post()
+                .uri("")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(req)
+                .retrieve()
+                .body(AiResponseMessage.class);
     }
 
     public AiResponseMessage spellCheckNotes(List<AnkiNoteCard> notes) {
@@ -56,17 +52,11 @@ public class XAiService {
         var prompt = createPrompt(spellCheckPrompt);
         var req = new AiMessageRequest(prompt, notes.toString());
 
-        // Convert the string to note cards or Ai response
-        try {
-            return grokClient.post()
-                    .uri("")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(req)
-                    .retrieve()
-                    .body(AiResponseMessage.class);
-        } catch (HttpClientErrorException e) {
-            System.err.println(e.getResponseBodyAsString());
-            throw e;
-        }
+        return grokClient.post()
+                .uri("")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(req)
+                .retrieve()
+                .body(AiResponseMessage.class);
     }
 }

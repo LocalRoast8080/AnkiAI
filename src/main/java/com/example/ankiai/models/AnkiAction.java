@@ -5,9 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
+@Slf4j
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,7 +28,9 @@ public class AnkiAction {
         try {
             return objectMapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error converting AnkiAction to JSON", e);
+            log.error("Failed to process JSON: {}", e.getMessage(), e);
+            // This doesnt see right
+            return "";
         }
     }
 }

@@ -1,19 +1,25 @@
 package com.example.ankiai.services;
 
-import com.example.ankiai.interfaces.IAnkiService;
 import com.example.ankiai.mappers.AnkiNoteCardMapper;
 import com.example.ankiai.models.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.Collections;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+@Slf4j
 @Service
-public class AnkiService implements IAnkiService {
+public class AnkiService {
 
     private final RestClient ankiClient;
     private final ObjectMapper mapper;
@@ -41,7 +47,8 @@ public class AnkiService implements IAnkiService {
             return response.result;
 
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            log.error("Failed to process JSON: {}", e.getMessage(), e);
+            return Collections.emptyList();
         }
     }
 
@@ -65,12 +72,12 @@ public class AnkiService implements IAnkiService {
             return note.getFirst();
 
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            log.error("Failed to process JSON: {}", e.getMessage(), e);
+            return null;
         }
     }
 
     public List<AnkiNoteCard> getNoteCards(List<Long> noteCardIds) {
-
         AnkiAction action = new AnkiAction("notesInfo");
 
         Map<String, Object> params = new HashMap<>();
@@ -86,11 +93,11 @@ public class AnkiService implements IAnkiService {
         try {
             AnkiResponse<List<AnkiNoteCardFull>> response = mapper.readValue(res, new TypeReference<AnkiResponse<List<AnkiNoteCardFull>>>() {
             });
-            var notes = ankiMapper.mapToAnkiNoteCards(response.result);
-            return notes;
+            return ankiMapper.mapToAnkiNoteCards(response.result);
 
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            log.error("Failed to process JSON: {}", e.getMessage(), e);
+            return Collections.emptyList();
         }
     }
 
@@ -112,13 +119,15 @@ public class AnkiService implements IAnkiService {
             });
 
             if (ankiRes.getError() != null) {
-                throw new RuntimeException(ankiRes.getError());
+                log.error("Failed to update NoteCard: {}", ankiRes.getError());
+                return Collections.emptyList();
             }
 
             return ankiRes.getResult();
 
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            log.error("Failed to process JSON: {}", e.getMessage(), e);
+            return Collections.emptyList();
         }
     }
 
@@ -140,14 +149,16 @@ public class AnkiService implements IAnkiService {
             });
 
             if (ankiRes.getError() != null) {
-                throw new RuntimeException(ankiRes.getError());
+                log.error("Failed to update NoteCard: {}", ankiRes.getError());
+                return Collections.emptyList();
             }
 
             var limitedIds = ankiRes.getResult();
 
             return ankiRes.getResult().subList(0, Math.min(limitedIds.size(), limit));
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            log.error("Failed to process JSON: {}", e.getMessage(), e);
+            return Collections.emptyList();
         }
     }
 
@@ -172,14 +183,16 @@ public class AnkiService implements IAnkiService {
             });
 
             if (ankiRes.getError() != null) {
-                throw new RuntimeException(ankiRes.getError());
+                log.error("Failed to update NoteCard: {}", ankiRes.getError());
+                return null;
             }
 
             // AnkiConnect Returns Null on 200. Returning model to simulate success. This will be wrapped at a later time.
             return noteCard;
 
         } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
+            log.error("Failed to process JSON: {}", e.getMessage(), e);
+            return null;
         }
     }
 
