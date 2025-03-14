@@ -10,9 +10,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class AnkiNoteCardFull {
-    @JsonProperty("noteId")
-    private long noteId;
-    @JsonProperty("fields")
-    private AnkiNoteFullFields fields;
+public class AnkiNoteFullFields {
+    @JsonProperty("Front")
+    private FieldValue front;
+
+    @JsonProperty("Back")
+    private FieldValue back;
+
+    @Data
+    public static class FieldValue{
+        private String value;
+    }
 }

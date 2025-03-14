@@ -25,6 +25,10 @@ public class NoteCardProcessorService {
     public List<AnkiNoteCard> spellCheck(List<AnkiNoteCard> noteCards) {
 
         var aiRes = xAiService.spellCheckNotes(noteCards);
+        if (aiRes == null) {
+            log.error("Failed to spell check note cards: {}", aiRes.toString());
+            return Collections.emptyList();
+        }
 
         var resString = aiRes.content.getFirst().message.content;
         if (resString.isBlank()) {
@@ -47,6 +51,10 @@ public class NoteCardProcessorService {
 
     public List<AnkiNoteCard> expandAnswers(List<AnkiNoteCard> noteCards) {
         var aiRes = xAiService.expandNotes(noteCards);
+        if (aiRes == null) {
+            log.error("Failed to expand note cards: {}", aiRes.toString());
+            return Collections.emptyList();
+        }
 
         var resString = aiRes.content.getFirst().message.content;
         if (resString.isBlank()) {

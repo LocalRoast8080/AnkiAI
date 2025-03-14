@@ -1,0 +1,3 @@
+spring.application.name=AnkiAI
+xapi.apiKey="YOUR_KEY"
+xapi.url="https://api.x.ai/v1/chat/completions"

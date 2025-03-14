@@ -41,7 +41,7 @@ public class NoteCardController {
         return ResponseEntity.ok(res);
     }
 
-    @GetMapping("/noteCards")
+    @PostMapping("/noteCards")
     public ResponseEntity<List<AnkiNoteCard>> getNoteCards(@RequestBody List<Long> noteCardIds) {
         if (noteCardIds.isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -63,5 +63,15 @@ public class NoteCardController {
         }
 
         return ResponseEntity.ok().body(res);
+    }
+
+    @PostMapping("/createNoteCard")
+    public ResponseEntity<List<Long>> createNoteCard(@RequestBody List<AnkiNoteCard> noteCard, @RequestParam("deckName") String deckName) {
+        var res = ankiService.createNoteCards(noteCard, deckName);
+        if(res == null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(res);
     }
 }

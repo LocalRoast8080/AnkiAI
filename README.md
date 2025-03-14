@@ -34,7 +34,7 @@ is to be able to process my personal 300 card coding study deck.
 |:------------------------------------------------------------|:----------:|:-------:|:---------------|:------|
 | Spell check 10 note cards 2/28 done                         |    2/28    |  Done   | 3/5            |
 | Expand the back (answer) portion of 10 note cards 2/28 done |    2/28    |  Done   | 3/5            |
-| Update 10 note cards in Anki after AI operations            |    2/28    | Pending |                |
+| Update 10 note cards in Anki after AI operations            |    2/28    |  Done   | 3/13           |
 | Perform the above on a 300 card deck 2/28                   |    2/28    | Pending |                |
 
 ### Stretch Goals
@@ -42,7 +42,7 @@ is to be able to process my personal 300 card coding study deck.
 | Task Description                 | Date Added | Status  | Date Completed | Notes                                                |
 |:---------------------------------|:----------:|:-------:|:---------------|:-----------------------------------------------------|
 | AnkiNote Controller Service      |    3/7     |  Done   | 3/7            | Complete AnkiNote Controller/Service CRUD logic      |
-| NoteProcessor Controller Service |    3/7     | Pending |                | Complete NoteProcessor Controller/Service CRUD logic |
+| NoteProcessor Controller Service |    3/7     | Pending | 3/10           | Complete NoteProcessor Controller/Service CRUD logic |
 | AnkiNote Unit Testing            |    3/7     | Pending |                | Testing Last  :grin:                                 |
 | NoteProcessor Unit Testing       |    3/7     | Pending |                |                                                      |
 
@@ -63,6 +63,8 @@ is to be able to process my personal 300 card coding study deck.
 | Endpoint to Suggest ten new cards                                      | 3/12        | Pending  | Endpoint scans deck and suggests 10 cards                                                                                                                           |
 | Ask AI generic thing have it generate Cards                            | 3/12        | Pending  | Can ask: What are the logging levels. It makes the cards                                                                                                            |
 | Tracing?                                                               | 3/12        | Pending  | Should look into. I have never implemented tracing.                                                                                                                 |
+| AWS Secrets Manager                                                    | 3/13        | Pending  | https://www.youtube.com/watch?v=ePTNs3pqVvg                                                                                                                         |
+|                                                                        |             |          |                                                                                                                                                                     |
 
 ---
 

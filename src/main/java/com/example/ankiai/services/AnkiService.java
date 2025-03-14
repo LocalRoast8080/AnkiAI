@@ -19,6 +19,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
+//Need to use the anki Response to pass up?
 public class AnkiService {
 
     private final RestClient ankiClient;
@@ -93,6 +94,10 @@ public class AnkiService {
         try {
             AnkiResponse<List<AnkiNoteCardFull>> response = mapper.readValue(res, new TypeReference<AnkiResponse<List<AnkiNoteCardFull>>>() {
             });
+            if(response.result.size() == 1 && response.result.getFirst().getNoteId() == 0){
+                log.error("Failed to get NoteCard: {}", response.error);
+                return Collections.emptyList();
+            }
             return ankiMapper.mapToAnkiNoteCards(response.result);
 
         } catch (JsonProcessingException e) {
@@ -162,16 +167,16 @@ public class AnkiService {
         }
     }
 
-    // https://git.sr.ht/~foosoft/anki-connect#codeupdatenotefieldscode Docs, add to interface later
     public AnkiNoteCard updateNote(AnkiNoteCard noteCard) {
-        AnkiNoteUpdateReq updateModel = ankiMapper.mapToAnkiNoteReq(noteCard);
+        AnkiNoteUpdateReq updateModel = ankiMapper.mapToAnkiUpdateReq(noteCard);
 
-        var action = new AnkiAction("updateNoteFields");
+        var action = new AnkiAction("updateNote");
         Map<String, Object> params = new HashMap<>();
 
         params.put("note", updateModel);
         action.setParams(params);
 
+        var t = action.toJsonString();
         var res = ankiClient.post()
                 .uri("")
                 .body(action.toJsonString())
@@ -196,7 +201,39 @@ public class AnkiService {
         }
     }
 
-    public AnkiNoteCard createNoteCard(AnkiNoteCard noteCard) {
-        throw new UnsupportedOperationException("This method is not implemented yet");
+    public List<Long> createNoteCards(List<AnkiNoteCard> noteCards, String deckName) {
+        List<AnkiCreateRequest> createRequest = ankiMapper.mapToAnkiCreateReqs(noteCards, deckName);
+        var v = createRequest.toString();
+        var action = new AnkiAction("addNotes");
+        Map<String, Object> params = new HashMap<>();
+
+        params.put("notes", createRequest);
+        action.setParams(params);
+        var t = action.toJsonString();
+        var res = ankiClient.post()
+                .uri("")
+                .body(action.toJsonString())
+                .retrieve()
+                .body(String.class);
+
+        try {
+            AnkiResponse<List<Long>> ankiRes = mapper.readValue(res, new TypeReference<AnkiResponse<List<Long>>>() {
+            });
+//            {
+//                "result" : null,
+//                    "error" : "['cannot create note because it is a duplicate']"
+//            }
+            if (ankiRes.getError() != null) {
+                log.error("Failed to create NoteCard: {}", ankiRes.getError());
+                return null;
+            }
+
+            // AnkiConnect Returns Null on 200. Returning model to simulate success. This will be wrapped at a later time.
+            return ankiRes.getResult();
+
+        } catch (JsonProcessingException e) {
+            log.error("Failed to process JSON: {}", e.getMessage(), e);
+            return null;
+        }
     }
 }
