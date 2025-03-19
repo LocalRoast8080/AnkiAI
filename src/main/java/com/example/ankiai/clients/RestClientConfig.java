@@ -15,7 +15,6 @@ public class RestClientConfig {
         this.xAiConfigProperties = xAiConfigProperties;
     }
 
-
     @Bean
     @Qualifier("ankiConnectClient")
     public RestClient ankiRestClient(){

@@ -176,7 +176,6 @@ public class AnkiService {
         params.put("note", updateModel);
         action.setParams(params);
 
-        var t = action.toJsonString();
         var res = ankiClient.post()
                 .uri("")
                 .body(action.toJsonString())
@@ -209,7 +208,7 @@ public class AnkiService {
 
         params.put("notes", createRequest);
         action.setParams(params);
-        var t = action.toJsonString();
+
         var res = ankiClient.post()
                 .uri("")
                 .body(action.toJsonString())

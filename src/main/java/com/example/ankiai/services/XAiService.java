@@ -5,10 +5,8 @@ import com.example.ankiai.models.AiResponseMessage;
 import com.example.ankiai.models.AnkiNoteCard;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
@@ -19,7 +17,6 @@ public class XAiService {
 
     private final RestClient grokClient;
 
-    // Should this be here? 3/6 I think not. If I ever want to change AI provider these are stuck here.
     private final String spellCheckPrompt = "perform spelling updated / fixes and grammatical corrections on the 'front' and 'back' fields" +
                                             "Do not update the answer, only fix spelling and complete words if needed.";
 //    private final String expandAnswerPrompt = "If a card's 'back' is sparse or lacks detail, expand it with relevant, accurate information while maintaining clarity." +
@@ -78,6 +75,5 @@ public class XAiService {
             log.error("Failed Spell Check {}:", e);
             return null;
         }
-
     }
 }
