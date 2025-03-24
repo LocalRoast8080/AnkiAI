@@ -176,7 +176,6 @@ public class AnkiService {
         params.put("note", updateModel);
         action.setParams(params);
 
-        var t = action.toJsonString();
         var res = ankiClient.post()
                 .uri("")
                 .body(action.toJsonString())
@@ -209,12 +208,19 @@ public class AnkiService {
 
         params.put("notes", createRequest);
         action.setParams(params);
-        var t = action.toJsonString();
-        var res = ankiClient.post()
-                .uri("")
-                .body(action.toJsonString())
-                .retrieve()
-                .body(String.class);
+        
+        String res = "";
+        try{
+            res = ankiClient.post()
+                    .uri("")
+                    .body(action.toJsonString())
+                    .retrieve()
+                    .body(String.class);
+            
+        }catch (Exception e){
+            log.error("Failed to post to AI endpoint: {}",e);
+            return Collections.emptyList();
+        }
 
         try {
             AnkiResponse<List<Long>> ankiRes = mapper.readValue(res, new TypeReference<AnkiResponse<List<Long>>>() {
@@ -225,7 +231,7 @@ public class AnkiService {
 //            }
             if (ankiRes.getError() != null) {
                 log.error("Failed to create NoteCard: {}", ankiRes.getError());
-                return null;
+                return Collections.emptyList();
             }
 
             // AnkiConnect Returns Null on 200. Returning model to simulate success. This will be wrapped at a later time.
@@ -233,7 +239,7 @@ public class AnkiService {
 
         } catch (JsonProcessingException e) {
             log.error("Failed to process JSON: {}", e.getMessage(), e);
-            return null;
+            return Collections.emptyList();
         }
     }
 }

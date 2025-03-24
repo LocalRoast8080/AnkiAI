@@ -123,4 +123,8 @@ Code Style -> Java -> Wrapping and Braces -> Binary Expression -> Align When Mul
 3/5 spring have two controller types `@Controller` and `@RestController` the first needs to return a view while rest
 lets me return plain info
 
-3/7 spring boot already includes JUnit 5 in the `spring-boot-starter-test`, it also contains mockito already.. Noice
+3/7 spring boot already includes JUnit 5 in the `spring-boot-starter-test`, it also contains mockito already... Noice
+
+3/19 Java has text blocks which can be used with """ Text here """
+
+3/19 Look into prompting [here](https://platform.openai.com/docs/guides/prompt-engineering)
