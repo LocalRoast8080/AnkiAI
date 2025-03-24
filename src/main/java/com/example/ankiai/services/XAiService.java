@@ -18,13 +18,14 @@ public class XAiService {
     private final RestClient grokClient;
 
     private final String formattingInstruction = "For questions expecting a single-word answer (e.g., 'What is the capital of Canada?'), provide only the word (e.g., 'Ottawa'). " +
-                                                 "For questions requiring a definition (e.g., 'What is photosynthesis?', 'What is gravity?'), provide a detailed, scientifically precise sentence " +
+                                                 "For questions requiring a definition (e.g., 'What is photosynthesis?', 'What is gravity?'), provide a detailed, scientifically precise answer " +
                                                  "(e.g., 'Photosynthesis is the biochemical process by which green plants, algae, and some bacteria convert light energy into chemical energy, " +
                                                  "using carbon dioxide and water to produce glucose and oxygen,' or 'Gravity is a fundamental force of nature, the force of attraction between objects with mass, " +
                                                  "responsible for keeping us on the ground and planets in orbit'). " +
                                                  "For questions asking for multiple items (e.g., 'What are the 5 Solid Principles?'), provide a concise list without explanations " +
                                                  "(e.g., '- Single Responsibility Principle\n- Open/Closed Principle\n- Liskov Substitution Principle\n- Interface Segregation Principle\n- Dependency Inversion Principle'). " +
-                                                 "Answers should not be more than 50 words typically.";
+                                                 "Answers should not be more than 50 words typically." +
+                                                 "For complex subject like coding and science you can go up to 50 word. IF needed past";
 
     private final String spellCheckPrompt = "perform spelling updated / fixes and grammatical corrections on the 'front' and 'back' fields" +
                                             "Do not update the answer, only fix spelling and complete words if needed.";
@@ -44,6 +45,16 @@ public class XAiService {
            - '??' = Treat the line as a subject, generate a context-appropriate question based on the input
                     (e.g., '?? HashMap' might become 'What is a HashMap?', or '?? x = 5;' might become 'What does this code do x = 5?'), and provide a detailed, accurate answer.
                     If the information after '-' the context line, can be turned into two cards do so.
+                    
+           - '?EX' = apply the rules from '?' then provide more detailed answer making sure to explore the complexity of the input.
+            (e.g., '?EX RestClient - what methods does it have? method chaining? general information? restClient.post()
+                             .uri("https://api.example.com/users")
+                             .contentType(MediaType.APPLICATION_JSON)
+                             .body(new User("John", "Doe"))
+                             .retrieve()
+                             .body(String.class);
+             The response here should dive into the .retreive() .body() and methods not listed but should be known.                
+             
            
            - Lines without '?+', '?:', or '??' are ignored unless indented under a question, in which case they provide context for the answer.
            
