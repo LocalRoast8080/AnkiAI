@@ -1,5 +1,6 @@
 package com.example.ankiai.services;
 
+import com.example.ankiai.execptions.SearchException;
 import com.example.ankiai.mappers.AnkiNoteCardMapper;
 import com.example.ankiai.models.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -202,7 +203,6 @@ public class AnkiService {
 
     public List<Long> createNoteCards(List<AnkiNoteCard> noteCards, String deckName) {
         List<AnkiCreateRequest> createRequest = ankiMapper.mapToAnkiCreateReqs(noteCards, deckName);
-        var v = createRequest.toString();
         var action = new AnkiAction("addNotes");
         Map<String, Object> params = new HashMap<>();
 
@@ -240,6 +240,46 @@ public class AnkiService {
         } catch (JsonProcessingException e) {
             log.error("Failed to process JSON: {}", e.getMessage(), e);
             return Collections.emptyList();
+        }
+    }
+
+    public List<AnkiNoteCard> searchNotes(String deckName, String query) {
+        AnkiAction action = new AnkiAction("notesInfo");
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("query", String.format("deck:%s %s", deckName, query));
+        action.setParams(params);
+
+        String res = "";
+        try {
+            res = ankiClient.post()
+                    .uri("")
+                    .body(action.toJsonString())
+                    .retrieve()
+                    .body(String.class);
+        } catch (Exception e) {
+            log.error("Failed to search notes: {}", e);
+            throw new SearchException("Failed to search notes");
+        }
+
+        try {
+            AnkiResponse<List<AnkiNoteCardFull>> notesResponse = mapper.readValue(res, new TypeReference<AnkiResponse<List<AnkiNoteCardFull>>>() {
+            });
+
+            if (notesResponse.getError() != null) {
+                log.error("Failed to find notes: {}", notesResponse.getError());
+                throw new SearchException("Failed to find notes");
+            }
+
+            if (notesResponse.getResult().isEmpty()) {
+                return Collections.emptyList();
+            }
+
+            return ankiMapper.mapToAnkiNoteCards(notesResponse.result);
+
+        } catch (JsonProcessingException e) {
+            log.error("Failed to process JSON: {}", e.getMessage(), e);
+            throw new SearchException("Failed to process search results");
         }
     }
 }

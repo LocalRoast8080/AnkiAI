@@ -3,6 +3,7 @@ package com.example.ankiai;
 import com.example.ankiai.execptions.AiException;
 import com.example.ankiai.execptions.EmptyFileException;
 import com.example.ankiai.execptions.InvalidFileException;
+import com.example.ankiai.execptions.SearchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,4 +30,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
+    @ExceptionHandler(SearchException.class)
+    public ProblemDetail handleSearchException(SearchException e, WebRequest req) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+    }
 }

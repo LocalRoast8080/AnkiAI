@@ -28,6 +28,7 @@ public interface AnkiNoteCardMapper {
     @Mapping(target = "deckName", source = "deckName")
     @Mapping(target = "fields.front", source = "noteCard.front")
     @Mapping(target = "fields.back", source = "noteCard.back")
+    @Mapping(target = "modelName", constant = "Basic")
     AnkiCreateRequest mapToAnkiCreateReq(AnkiNoteCard noteCard, String deckName);
 
     default List<AnkiCreateRequest> mapToAnkiCreateReqs(List<AnkiNoteCard> noteCards, String deckName) {
