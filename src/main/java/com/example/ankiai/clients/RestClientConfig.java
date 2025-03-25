@@ -31,5 +31,4 @@ public class RestClientConfig {
                 .defaultHeader("Authorization", xAiConfigProperties.apiKey())
                 .build();
     }
-
 }

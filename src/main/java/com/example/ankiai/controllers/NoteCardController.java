@@ -74,4 +74,9 @@ public class NoteCardController {
 
         return ResponseEntity.ok(res);
     }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<AnkiNoteCard>> searchNoteCards(){
+        return ResponseEntity.ok().build();
+    }
 }

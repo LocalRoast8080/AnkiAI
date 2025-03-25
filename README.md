@@ -30,12 +30,12 @@ is to be able to process my personal 300 card coding study deck.
 
 ### MVP:
 
-| Task Description                                            | Date Added | Status  | Date Completed | Notes |
-|:------------------------------------------------------------|:----------:|:-------:|:---------------|:------|
-| Spell check 10 note cards 2/28 done                         |    2/28    |  Done   | 3/5            |
-| Expand the back (answer) portion of 10 note cards 2/28 done |    2/28    |  Done   | 3/5            |
-| Update 10 note cards in Anki after AI operations            |    2/28    |  Done   | 3/13           |
-| Perform the above on a 300 card deck 2/28                   |    2/28    | Pending |                |
+| Task Description                                            | Date Added | Status | Date Completed | Notes                                                                                 |
+|:------------------------------------------------------------|:----------:|:------:|:---------------|:--------------------------------------------------------------------------------------|
+| Spell check 10 note cards 2/28 done                         |    2/28    |  Done  | 3/5            |                                                                                       |
+| Expand the back (answer) portion of 10 note cards 2/28 done |    2/28    |  Done  | 3/5            |                                                                                       |
+| Update 10 note cards in Anki after AI operations            |    2/28    |  Done  | 3/13           |                                                                                       |
+| Perform the above on a 300 card deck 2/28                   |    2/28    |  Done  | 3/20           | Grok times out with too large a pay load and this also makes it start to hallucinate. |
 
 ### Stretch Goals
 
@@ -61,7 +61,7 @@ is to be able to process my personal 300 card coding study deck.
 | Input models vs Service Models?                                        | 3/9         | Pending  | Should I make entity for my service and move models to controller. Seems like unnecessary work atm                                                                  |
 | Add Validator                                                          | 3/9         | Pending  | Don't need this now but [here](https://docs.spring.io/spring-framework/reference/core/validation/beanvalidation.html#validation-beanvalidation-spring) are the docs |
 | Endpoint to Suggest ten new cards                                      | 3/12        | Pending  | Endpoint scans deck and suggests 10 cards                                                                                                                           |
-| Ask AI generic thing have it generate Cards                            | 3/12        | Pending  | Can ask: What are the logging levels. It makes the cards                                                                                                            |
+| Ask AI generic thing have it generate Cards                            | 3/20        | Done     | Can now upload txt strings and txt files                                                                                                                            |
 | Tracing?                                                               | 3/12        | Pending  | Should look into. I have never implemented tracing.                                                                                                                 |
 | AWS Secrets Manager                                                    | 3/13        | Pending  | https://www.youtube.com/watch?v=ePTNs3pqVvg                                                                                                                         |
 |                                                                        |             |          |                                                                                                                                                                     |
@@ -90,6 +90,9 @@ xapi.url =https://api.x.ai/v1/chat/completions
 3/11 I am going to skip testing for now. I looked into how to set up interface Mocks and basic testing. Its
 basically the same as .NET . While testing needs to be done I have not settled on many things as I am mainly poking
 around with spring.
+
+3/20 While the code still needed intensive testing. I will start to transition to working on a UI for the app. I will still
+set up an exception handler but the base prototype functions as intended and better than expected.
 
 ## Lesson Learned:
 
@@ -128,3 +131,7 @@ lets me return plain info
 3/19 Java has text blocks which can be used with """ Text here """
 
 3/19 Look into prompting [here](https://platform.openai.com/docs/guides/prompt-engineering)
+
+3/24 In a class with multiple constructors you can use other constructors with each other to cut duplicate code.
+
+3/24 Java/ Spring now have Problem Detail which is what I was trying to make to wrap executions based off an old article [here](https://www.toptal.com/java/spring-boot-rest-api-error-handling)
