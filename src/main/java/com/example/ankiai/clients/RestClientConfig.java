@@ -23,6 +23,7 @@ public class RestClientConfig {
                 .build();
     }
 
+    // log no api key.
     @Bean
     @Qualifier("grokClient")
     public RestClient grokAiClient(){
@@ -31,5 +32,4 @@ public class RestClientConfig {
                 .defaultHeader("Authorization", xAiConfigProperties.apiKey())
                 .build();
     }
-
 }

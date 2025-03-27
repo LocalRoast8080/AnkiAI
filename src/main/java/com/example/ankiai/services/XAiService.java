@@ -1,5 +1,6 @@
 package com.example.ankiai.services;
 
+import com.example.ankiai.execptions.AiException;
 import com.example.ankiai.models.AiMessageRequest;
 import com.example.ankiai.models.AiResponseMessage;
 import com.example.ankiai.models.AnkiNoteCard;
@@ -118,8 +119,7 @@ public class XAiService {
                     .body(AiResponseMessage.class);
 
         } catch (Exception e) {
-            log.error("Failed Spell Check {}:", e);
-            return null;
+            throw new AiException("Failed spell checking try again");
         }
     }
 
@@ -137,8 +137,7 @@ public class XAiService {
                     .body(AiResponseMessage.class);
 
         } catch (Exception e) {
-            log.error("Failed to generate cards {}:", e);
-            return null;
+            throw new AiException("Failed to generate cards validate input and try again.");
         }
     }
 }

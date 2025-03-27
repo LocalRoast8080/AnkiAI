@@ -1,130 +1,174 @@
-# AnkiAi
+# AnkiAI
 
-## Overview
+[![Java Version](https://img.shields.io/badge/Java-21-blue)](https://openjdk.org/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.3-brightgreen)](https://spring.io/projects/spring-boot)
+[![License](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
 
-This project is for me to test sending Anki study cards to an AI model (currently Grok v2) to see
-if it can:
+## 📚 Overview
 
-* spell check & clean up grammar on cards
-* expand on a cards answer (back) if the LLM deems it lacking
+AnkiAI is a powerful bridge between Anki flashcards and AI language models. This application allows you to:
 
-My initial goal is to set up basic services for Anki operation and communicating with an AI LLM. The end goal
-is to be able to process my personal 300 card coding study deck.
+- **Spell check & improve grammar** on existing Anki cards
+- **Expand card content** with AI-generated explanations when answers are lacking
+- **Generate new flashcards** from text input, automatically creating question/answer pairs
+- **Manage Anki decks and cards** through a RESTful API
 
-## Dependencies / Tech
+Initially developed to process a personal 300-card coding study deck, AnkiAI provides a comprehensive set of services for Anki integration and AI-powered enhancements.
 
-- Anki Desktop Windows Version - 23.10.1
-- Anki plug-in ~ AnkiConnect
-- Java 21
-- Spring Boot Starter Web
-- Lombok - 1.18.30 ~ Might be able to upgrade. Do not want to risk breaking MapStruct
-- MapStruct - 1.6.0
-- Lombok-MapStruct-Binding - 0.2.0
-- IDE plug-in ~ MapStruct Support
-- IDE plug-in ~ Lombok
+## 🛠️ Technology Stack
 
----
+### Core Technologies
+- **Java 21** - Latest LTS release with modern language features
+- **Spring Boot 3.4.3** - Application framework with embedded web server
+- **Lombok** - Reduces boilerplate code through annotations
+- **MapStruct** - Type-safe bean mapping between DTOs and domain objects
+- **Swagger/OpenAPI** - API documentation via SpringDoc
 
+### Anki Integration
+- **Anki Desktop** - Version 23.10.1 (Windows)
+- **AnkiConnect** - Required Anki plugin for API communication
 
-## Current Status
+### AI Processing
+- **X.AI (Grok v2)** - Default AI model for text processing operations
+- Support for configurable AI providers
 
-### MVP:
+## 🚀 Features
 
-| Task Description                                            | Date Added | Status  | Date Completed | Notes |
-|:------------------------------------------------------------|:----------:|:-------:|:---------------|:------|
-| Spell check 10 note cards 2/28 done                         |    2/28    |  Done   | 3/5            |
-| Expand the back (answer) portion of 10 note cards 2/28 done |    2/28    |  Done   | 3/5            |
-| Update 10 note cards in Anki after AI operations            |    2/28    |  Done   | 3/13           |
-| Perform the above on a 300 card deck 2/28                   |    2/28    | Pending |                |
+### Anki Card Management
+- Retrieve deck names and card information
+- Create new cards programmatically
+- Update existing cards
+- Search for cards with specific content
 
-### Stretch Goals
+### AI-Powered Enhancements
+- **Spell Check & Grammar Correction** - Improve the quality of your flashcards
+- **Content Expansion** - Add detailed explanations to card answers
+- **Automatic Card Generation** - Create new cards from text input
+- **Bulk Processing** - Handle multiple cards in a single request
 
-| Task Description                 | Date Added | Status  | Date Completed | Notes                                                |
-|:---------------------------------|:----------:|:-------:|:---------------|:-----------------------------------------------------|
-| AnkiNote Controller Service      |    3/7     |  Done   | 3/7            | Complete AnkiNote Controller/Service CRUD logic      |
-| NoteProcessor Controller Service |    3/7     | Pending | 3/10           | Complete NoteProcessor Controller/Service CRUD logic |
-| AnkiNote Unit Testing            |    3/7     | Pending |                | Testing Last  :grin:                                 |
-| NoteProcessor Unit Testing       |    3/7     | Pending |                |                                                      |
+### File Support
+- Upload text files to generate cards from structured content
+- Process raw text input with special formatting for question/answer pairs
 
-### Issues and Todos:
+## 🏗️ Architecture
 
-| Task Description                                                       | Target Date | Status   | Notes                                                                                                                                                               |
-|------------------------------------------------------------------------|-------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Explore Swagger for API documentation                                  | 3/5         | Done 3/7 | Docs [here](https://springdoc.org/#getting-started)                                                                                                                 |
-| Debug RestClient object parsing issue                                  | 2/28        | Pending  | Fix body serialization (.Body(Object)). Would always populate null.                                                                                                 |
-| Add HTTP code catches in clients                                       | 2/28        | Pending  | If there is an http issue the code will break                                                                                                                       |
-| Build interfaces for testing and mocking                               | 2/28        | Pending  | For unit tests                                                                                                                                                      |
-| Swap all classes to use Lombok                                         | 2/28        | Done 3/7 | Reduced boilerplate                                                                                                                                                 |
-| Look into OpenAI’s API contract                                        | 2/28        | Pending  | Compare with Grok, Claude                                                                                                                                           |
-| Add constants (context unclear, revisit)                               | 2/28        | Pending  | Clarify purpose                                                                                                                                                     |
-| Had issues using nested classes with mapStruct, broke them out instead | 3/7         | Pending  | This should be possible. Didn't want to waste more time for now.                                                                                                    |
-| Input models vs Service Models?                                        | 3/9         | Pending  | Should I make entity for my service and move models to controller. Seems like unnecessary work atm                                                                  |
-| Add Validator                                                          | 3/9         | Pending  | Don't need this now but [here](https://docs.spring.io/spring-framework/reference/core/validation/beanvalidation.html#validation-beanvalidation-spring) are the docs |
-| Endpoint to Suggest ten new cards                                      | 3/12        | Pending  | Endpoint scans deck and suggests 10 cards                                                                                                                           |
-| Ask AI generic thing have it generate Cards                            | 3/12        | Pending  | Can ask: What are the logging levels. It makes the cards                                                                                                            |
-| Tracing?                                                               | 3/12        | Pending  | Should look into. I have never implemented tracing.                                                                                                                 |
-| AWS Secrets Manager                                                    | 3/13        | Pending  | https://www.youtube.com/watch?v=ePTNs3pqVvg                                                                                                                         |
-|                                                                        |             |          |                                                                                                                                                                     |
+AnkiAI follows a clean, layered architecture:
 
----
+- **Controllers** - REST endpoints for API access
+- **Services** - Business logic implementation
+- **Clients** - External API integrations (Anki, AI providers)
+- **Models** - Data structures and DTOs
+- **Mappers** - Type conversion between different object models
+- **Exception Handling** - Centralized error management
 
-## Configuration
+## 🔧 Setup & Configuration
 
-### Setup
+### Prerequisites
+1. Java 21 or higher
+2. Anki Desktop (v23.10.1 or compatible)
+3. AnkiConnect plugin installed in Anki
+4. Maven for dependency management
 
-#### Anki - AnkiConnect
+### Configuration
+1. Clone the repository
+2. Rename `.env.example` to `.env` and add your API keys
+3. Configure application settings in `application.properties`:
+   ```properties
+   xapi.apikey=your-api-key
+   xapi.url=https://api.x.ai/v1/chat/completions
+   ```
 
-#### API Keys & Secrets
-
-In your `application.properties` file add the following.
-
+### Building the Project
+```bash
+mvn clean install
 ```
-xapi.apikey="you-api-key"
-xapi.url =https://api.x.ai/v1/chat/completions
+
+### Running the Application
+```bash
+mvn spring-boot:run
 ```
 
----
+## 🔌 API Documentation
 
-## Decision Log
+Once the application is running, access the Swagger UI documentation at:
+```
+http://localhost:8080/swagger-ui.html
+```
 
-3/11 I am going to skip testing for now. I looked into how to set up interface Mocks and basic testing. Its
-basically the same as .NET . While testing needs to be done I have not settled on many things as I am mainly poking
-around with spring.
+### Key Endpoints
 
-## Lesson Learned:
+#### Anki Note Management
+- `GET /api/v1/note/deckNames` - Retrieve all available decks
+- `GET /api/v1/note/noteIds` - Get note IDs from a specific deck
+- `POST /api/v1/note/noteCards` - Retrieve note cards by IDs
+- `PATCH /api/v1/note/updateNoteCard` - Update an existing note card
+- `POST /api/v1/note/createNoteCard` - Create new note cards
+- `POST /api/v1/note/search` - Search for note cards
 
-RestClient is a new way to send http request. Seems to replacing RestTemplate, which I have not used.
+#### AI Processing
+- `POST /api/v1/aiProcessor/spellCheck` - Spell check and correct cards
+- `POST /api/v1/aiProcessor/expandAnswers` - Expand card answers with AI
+- `POST /api/v1/aiProcessor/generateCards` - Generate cards from text input
+- `POST /api/v1/aiProcessor/generateCards/upload` - Generate cards from uploaded file
 
-I can use Lombok to create getters and setters. It also allows the use of `val` and `var` similar to c#. I still need to
-look into this since I do
-note really understand it.
+## 📝 Usage Examples
 
-2/28 Lombok `@RequiredArgs` makes a constructor for fields marked final. where `@AllArgs` does what the name says
+### Spell Check Cards
+```bash
+curl -X POST http://localhost:8080/api/v1/aiProcessor/spellCheck \
+  -H "Content-Type: application/json" \
+  -d '[{"noteId": 1234567890, "front": "What is a monad?", "back": "A monad is a monoid in the category of endofunctors."}]'
+```
 
-3/4 With jackson you can use @JsonIgnoreProperties(ignoreUnknown = true) to omit unwanted json fields being required in
-the class. .net mapping
-did this automatically.
+### Generate Cards from Text
+```bash
+curl -X POST http://localhost:8080/api/v1/aiProcessor/generateCards \
+  -H "Content-Type: application/json" \
+  -d "? What is Spring Boot?\nSpring Boot is an opinionated framework that simplifies Spring application development.\n\n? What is dependency injection?\nDependency injection is a design pattern used to implement IoC."
+```
 
-3/4 MapStruct is like AutoMapper. Less clean, messier but seems to function the
-same [Docs here](https://mapstruct.org/documentation/stable/reference/html/)
+## 🔍 Current Status
 
-3/4 Sometimes after adding a maven dependency and building it still does not register with the IDE. With IntelliJ in the
-pom.xml you can sync it to see if that fixes.
+### Completed Tasks
+- ✅ Spell check and grammar correction for note cards
+- ✅ Answer expansion for clarification and detail
+- ✅ Card update functionality with Anki integration
+- ✅ Processing of large card decks (300+ cards)
+- ✅ Swagger/OpenAPI documentation
+- ✅ Lombok integration for reduced boilerplate
+- ✅ AI-based generation of new cards from text input
+- ✅ File upload functionality for generating cards
 
-3/4 MapStruct and Lombok need special set
-up [seen here](https://github.com/mapstruct/mapstruct-examples/blob/main/mapstruct-lombok/pom.xml) mapstruct
-note [here](https://mapstruct.org/faq/#Can-I-use-MapStruct-together-with-Project-Lombok)
-I just copied and pasted what they had on GitHub. I spent too many hours trying to just get them to work. I should go
-back and read what it is actually doing.
+### Ongoing Development
+- 🔄 Exploring integration with additional AI providers
+- 🔄 Enhanced exception handling and input validation
+- 🔄 Unit and integration testing
+- 🔄 UI development for improved user experience
 
-3/5 To make large String text blocks / paragraphs align and not have an indent on the first line set Project Setting ->
-Code Style -> Java -> Wrapping and Braces -> Binary Expression -> Align When Multiline
+## 🛣️ Roadmap
 
-3/5 spring have two controller types `@Controller` and `@RestController` the first needs to return a view while rest
-lets me return plain info
+- Implement AWS Secrets Manager for better security
+- Add distributed tracing capabilities
+- Create a UI for easier interaction with the API
+- Add support for additional AI models (OpenAI, Claude)
+- Enhance card generation with specialized algorithms for different subjects
 
-3/7 spring boot already includes JUnit 5 in the `spring-boot-starter-test`, it also contains mockito already... Noice
+## 📜 License
 
-3/19 Java has text blocks which can be used with """ Text here """
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-3/19 Look into prompting [here](https://platform.openai.com/docs/guides/prompt-engineering)
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📚 Acknowledgements
+
+- Anki for creating an excellent flashcard application
+- AnkiConnect developers for enabling API integration
+- X.AI for their language model API 

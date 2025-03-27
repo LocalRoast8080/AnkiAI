@@ -1,5 +1,7 @@
 package com.example.ankiai.controllers;
 
+import com.example.ankiai.execptions.EmptyFileException;
+import com.example.ankiai.execptions.InvalidFileException;
 import com.example.ankiai.models.AnkiNoteCard;
 import com.example.ankiai.services.NoteCardProcessorService;
 import lombok.RequiredArgsConstructor;
@@ -71,8 +73,14 @@ public class AiProcessorController {
     @PostMapping(value = "/generateCards/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<List<AnkiNoteCard>> generateCardsUpload(@RequestParam("file") MultipartFile file) throws IOException {
         if(file.isEmpty()){
-            return ResponseEntity.badRequest().build();
+            throw new EmptyFileException("File uploaded is empty.");
         }
+
+        var fileName = file.getOriginalFilename();
+        if(fileName == null || !fileName.toLowerCase().endsWith(".txt")){
+            throw new InvalidFileException("Only .txt files can be uploaded");
+        }
+
         // validate input
         var stringFile = new String(file.getBytes());
         var res = noteCardProcessorService.generateCards(stringFile);

@@ -2,8 +2,9 @@ package com.example.ankiai.controllers;
 
 import com.example.ankiai.models.AnkiDeck;
 import com.example.ankiai.models.AnkiNoteCard;
+import com.example.ankiai.models.SearchRequest;
 import com.example.ankiai.services.AnkiService;
-import com.example.ankiai.services.NoteCardProcessorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,18 +18,12 @@ import java.util.List;
 @RequestMapping("/api/v1/note")
 public class NoteCardController {
 
-    private final NoteCardProcessorService noteCardProcessorService;
     private final AnkiService ankiService;
 
     @GetMapping("/deckNames")
     public ResponseEntity<List<AnkiDeck>> getDeckNames() {
         var res = ankiService.getDecks();
-        if (res.isEmpty()) {
-            // Think I still need a wrapper to return a message.
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok().body(res);
+        return ResponseEntity.ok(res);
     }
 
     @GetMapping("/noteIds")
@@ -52,7 +47,7 @@ public class NoteCardController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok().body(res);
+        return ResponseEntity.ok(res);
     }
 
     @PatchMapping("/updateNoteCard")
@@ -62,7 +57,7 @@ public class NoteCardController {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok().body(res);
+        return ResponseEntity.ok(res);
     }
 
     @PostMapping("/createNoteCard")
@@ -73,5 +68,11 @@ public class NoteCardController {
         }
 
         return ResponseEntity.ok(res);
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<AnkiNoteCard>> searchNoteCards(@Valid @RequestBody SearchRequest request) {
+        var notes = ankiService.searchNotes(request.getDeckName(), request.getQuery());
+        return ResponseEntity.ok(notes);
     }
 }
