@@ -44,6 +44,7 @@ public class AnkiService {
                     .body(action.toJsonString())
                     .retrieve()
                     .body(String.class);
+
         } catch (RestClientException e) {
             throw new RestException("Failed to perform get decks REST call.", e.getMessage());
         }
@@ -73,6 +74,7 @@ public class AnkiService {
                     .body(action.toJsonString())
                     .retrieve()
                     .body(String.class);
+
         } catch (RestClientException e) {
             throw new RestException("Fail to perform get note card REST call.", e.getMessage());
         }
@@ -104,6 +106,7 @@ public class AnkiService {
                     .body(action.toJsonString())
                     .retrieve()
                     .body(String.class);
+
         } catch (RestClientException e) {
             throw new RestException("Failed to perform get note cards REST call.", e.getMessage());
         }
@@ -138,6 +141,7 @@ public class AnkiService {
                     .body(action.toJsonString())
                     .retrieve()
                     .body(String.class);
+
         } catch (RestClientException e) {
             throw new RestException("Failed to perform get all note ids REST call.", e.getMessage());
         }
@@ -166,14 +170,15 @@ public class AnkiService {
         action.setParams(params);
 
         String res;
-        try{
+        try {
             res = ankiClient.post()
                     .uri("")
                     .body(action.toJsonString())
                     .retrieve()
                     .body(String.class);
-        }catch (RestClientException e){
-            throw new RestException("Failed to get note card ids REST call.",e.getMessage());
+
+        } catch (RestClientException e) {
+            throw new RestException("Failed to get note card ids REST call.", e.getMessage());
         }
 
         try {
@@ -202,14 +207,15 @@ public class AnkiService {
         action.setParams(params);
 
         String res;
-        try{
+        try {
             res = ankiClient.post()
                     .uri("")
                     .body(action.toJsonString())
                     .retrieve()
                     .body(String.class);
-        }catch (RestClientException e){
-            throw new RestException("Failed to perform update note REST call.",e.getMessage());
+
+        } catch (RestClientException e) {
+            throw new RestException("Failed to perform update note REST call.", e.getMessage());
         }
 
         try {
@@ -244,6 +250,7 @@ public class AnkiService {
                     .body(action.toJsonString())
                     .retrieve()
                     .body(String.class);
+
         } catch (RestClientException e) {
             throw new RestException("Failed to perform create note cards REST call.", e.getMessage());
         }
@@ -282,6 +289,7 @@ public class AnkiService {
                     .body(action.toJsonString())
                     .retrieve()
                     .body(String.class);
+
         } catch (RestClientException e) {
             throw new RestException("Failed perform to search notes REST call.", e.getMessage());
         }

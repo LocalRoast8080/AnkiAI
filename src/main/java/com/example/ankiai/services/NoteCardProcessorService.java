@@ -25,22 +25,12 @@ public class NoteCardProcessorService {
     public List<AnkiNoteCard> spellCheck(List<AnkiNoteCard> noteCards) {
 
         var aiRes = xAiService.spellCheckNotes(noteCards);
-        if (aiRes == null) {
-            log.error("Failed to spell check note cards");
-            return Collections.emptyList();
-        }
-
         var resString = aiRes.content.getFirst().message.content;
-        if (resString.isBlank()) {
-            log.error("Failed to spell check note cards: {}", aiRes.toString());
-            return Collections.emptyList();
-        }
 
         List<AnkiNoteCard> mappedNotes;
         try {
             mappedNotes = objectMapper.readValue(resString, new TypeReference<List<AnkiNoteCard>>() {
             });
-
         } catch (JsonProcessingException e) {
             log.error("Failed to process JSON: {}", e.getMessage(), e);
             return Collections.emptyList();
@@ -51,22 +41,12 @@ public class NoteCardProcessorService {
 
     public List<AnkiNoteCard> expandAnswers(List<AnkiNoteCard> noteCards) {
         var aiRes = xAiService.expandNotes(noteCards);
-        if (aiRes == null) {
-            log.error("Failed to expand note cards, null response:");
-            return Collections.emptyList();
-        }
-
         var resString = aiRes.content.getFirst().message.content;
-        if (resString.isBlank()) {
-            log.error("Failed to expand note cards, blank response: {}", aiRes);
-            return Collections.emptyList();
-        }
 
         List<AnkiNoteCard> mappedNotes;
         try {
             mappedNotes = objectMapper.readValue(resString, new TypeReference<List<AnkiNoteCard>>() {
             });
-
         } catch (JsonProcessingException e) {
             log.error("Failed to process map json response: {}", e.getMessage(), e);
             return Collections.emptyList();
@@ -77,22 +57,12 @@ public class NoteCardProcessorService {
 
     public List<AnkiNoteCard> generateCards(String text) {
         var aiRes = xAiService.generateCards(text);
-        if(aiRes == null){
-            log.error("Failed to generate cards");
-            return Collections.emptyList();
-        }
-
         var resString = aiRes.content.getFirst().message.content;
-        if (resString.isBlank()) {
-            log.error("Failed to generate cards, blank response: {}", aiRes);
-            return Collections.emptyList();
-        }
 
         List<AnkiNoteCard> mappedNotes;
         try {
             mappedNotes = objectMapper.readValue(resString, new TypeReference<List<AnkiNoteCard>>() {
             });
-
         } catch (JsonProcessingException e) {
             log.error("Failed to process map json response: {}", e.getMessage(), e);
             return Collections.emptyList();
