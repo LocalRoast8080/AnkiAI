@@ -24,7 +24,7 @@ public class XAiService {
                                                  "using carbon dioxide and water to produce glucose and oxygen,' or 'Gravity is a fundamental force of nature, the force of attraction between objects with mass, " +
                                                  "responsible for keeping us on the ground and planets in orbit'). " +
                                                  "For questions asking for multiple items (e.g., 'What are the 5 Solid Principles?'), provide a concise list without explanations " +
-                                                 "(e.g., '- Single Responsibility Principle\n- Open/Closed Principle\n- Liskov Substitution Principle\n- Interface Segregation Principle\n- Dependency Inversion Principle'). " +
+                                                 "(e.g., '- Single Responsibility Principle<br>- Open/Closed Principle<br>- Liskov Substitution Principle<br>- Interface Segregation Principle<br>- Dependency Inversion Principle'). " +
                                                  "Answers should not be more than 50 words typically." +
                                                  "For complex subject like coding and science you can go up to 50 word. IF needed past";
 
@@ -42,6 +42,7 @@ public class XAiService {
            create a single question in the form 'What is [term]?', and use any text after a dash ('-') as context for a detailed, accurate answer.
            If no dash is present, focus only on the first significant term (e.g., a class name, noun, or annotated word) and ignore the rest unless it’s indented context.
            Do not treat code snippets as full questions.
+           If the Primary term is next to an acronym 'Change Data Capture CDC' it does not need to be split into separate cards.
            
            - '??' = Treat the line as a subject, generate a context-appropriate question based on the input
                     (e.g., '?? HashMap' might become 'What is a HashMap?', or '?? x = 5;' might become 'What does this code do x = 5?'), and provide a detailed, accurate answer.
@@ -55,14 +56,16 @@ public class XAiService {
                              .retrieve()
                              .body(String.class);
              The response here should dive into the .retreive() .body() and methods not listed but should be known.                
-             
            
-           - Lines without '?+', '?:', or '??' are ignored unless indented under a question, in which case they provide context for the answer.
+            - '?M' = Treat the line as a manually defined card. Everything before the colon (':') is the 'front', and everything after is the 'back'.
+                                (e.g., '?M Algo Key Word Top K - Heap : K Closest Points' becomes 'front': 'Algo Key Word Top K - Heap', 'back': 'K Closest Points').  
+           
+           - Lines without '?', '??', '?EX' or '?M' are ignored unless indented under a question, in which case they provide context for the answer.
            
            Understanding Context:
            - ? RestClient - what methods does it have? method chaining? general information? : on this line 'general information' implies making a card like 'What is RestClient?'
            
-           If needed split a line into multiple cards. One card should always be one question.
+           If needed split a line into multiple cards. One card should always be one question. Cards Should not be duplicated or have the same Title.
            
            Apply the following rules to all answers: %s
            Fix spelling and grammatical errors in the 'front' field without changing its intent.
