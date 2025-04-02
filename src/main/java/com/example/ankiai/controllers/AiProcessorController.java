@@ -1,7 +1,7 @@
 package com.example.ankiai.controllers;
 
-import com.example.ankiai.execptions.EmptyFileException;
-import com.example.ankiai.execptions.InvalidFileException;
+import com.example.ankiai.exceptions.EmptyFileException;
+import com.example.ankiai.exceptions.InvalidFileException;
 import com.example.ankiai.models.AnkiNoteCard;
 import com.example.ankiai.services.NoteCardProcessorService;
 import lombok.RequiredArgsConstructor;

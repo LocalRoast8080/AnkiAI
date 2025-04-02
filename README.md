@@ -1,4 +1,5 @@
 # AnkiAI
+This project it still a prototype and in development!
 
 [![Java Version](https://img.shields.io/badge/Java-21-blue)](https://openjdk.org/)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.3-brightgreen)](https://spring.io/projects/spring-boot)
@@ -26,7 +27,8 @@ Initially developed to process a personal 300-card coding study deck, AnkiAI pro
 
 ### Anki Integration
 - **Anki Desktop** - Version 23.10.1 (Windows)
-- **AnkiConnect** - Required Anki plugin for API communication
+  - Planning to update to latest version as it is now functioning with AnkiConnect.
+- **AnkiConnect** - Required Anki plugin for API communication [Docs](https://git.sr.ht/~foosoft/anki-connect)
 
 ### AI Processing
 - **X.AI (Grok v2)** - Default AI model for text processing operations
@@ -71,8 +73,7 @@ AnkiAI follows a clean, layered architecture:
 
 ### Configuration
 1. Clone the repository
-2. Rename `.env.example` to `.env` and add your API keys
-3. Configure application settings in `application.properties`:
+2. Configure application settings in `application.properties`:
    ```properties
    xapi.apikey=your-api-key
    xapi.url=https://api.x.ai/v1/chat/completions
@@ -124,7 +125,7 @@ curl -X POST http://localhost:8080/api/v1/aiProcessor/spellCheck \
 ```bash
 curl -X POST http://localhost:8080/api/v1/aiProcessor/generateCards \
   -H "Content-Type: application/json" \
-  -d "? What is Spring Boot?\nSpring Boot is an opinionated framework that simplifies Spring application development.\n\n? What is dependency injection?\nDependency injection is a design pattern used to implement IoC."
+  -d "? What is Spring Boot? \n? What is dependency injection?"
 ```
 
 ## 🔍 Current Status
@@ -138,12 +139,6 @@ curl -X POST http://localhost:8080/api/v1/aiProcessor/generateCards \
 - ✅ Lombok integration for reduced boilerplate
 - ✅ AI-based generation of new cards from text input
 - ✅ File upload functionality for generating cards
-
-### Ongoing Development
-- 🔄 Exploring integration with additional AI providers
-- 🔄 Enhanced exception handling and input validation
-- 🔄 Unit and integration testing
-- 🔄 UI development for improved user experience
 
 ## 🛣️ Roadmap
 

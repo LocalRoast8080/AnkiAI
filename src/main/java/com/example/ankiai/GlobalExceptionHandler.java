@@ -1,9 +1,6 @@
 package com.example.ankiai;
 
-import com.example.ankiai.execptions.AiException;
-import com.example.ankiai.execptions.EmptyFileException;
-import com.example.ankiai.execptions.InvalidFileException;
-import com.example.ankiai.execptions.SearchException;
+import com.example.ankiai.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,13 +22,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
-    @ExceptionHandler(AiException.class)
-    public ProblemDetail handleAiException(AiException e, WebRequest req){
-        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
-    }
-
     @ExceptionHandler(SearchException.class)
     public ProblemDetail handleSearchException(SearchException e, WebRequest req) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.getMessage());
+    }
+
+    @ExceptionHandler(RestException.class)
+    public ProblemDetail handleRestException(RestException e, WebRequest req){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 }

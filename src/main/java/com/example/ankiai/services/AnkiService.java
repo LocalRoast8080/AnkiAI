@@ -1,6 +1,7 @@
 package com.example.ankiai.services;
 
-import com.example.ankiai.execptions.SearchException;
+import com.example.ankiai.exceptions.RestException;
+import com.example.ankiai.exceptions.SearchException;
 import com.example.ankiai.mappers.AnkiNoteCardMapper;
 import com.example.ankiai.models.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +22,6 @@ import java.util.Map;
 
 @Slf4j
 @Service
-//Need to use the anki Response to pass up?
 public class AnkiService {
 
     private final RestClient ankiClient;
@@ -33,22 +34,26 @@ public class AnkiService {
         this.ankiMapper = ankiMapper;
     }
 
-    // add anki response that returns  result T or String Error
     public List<AnkiDeck> getDecks() {
         AnkiAction action = new AnkiAction("deckNames");
 
-        var res = ankiClient.post()
-                .uri("/")
-                .body(action.toJsonString())
-                .retrieve()
-                .body(String.class);
+        String res;
+        try {
+            res = ankiClient.post()
+                    .uri("/")
+                    .body(action.toJsonString())
+                    .retrieve()
+                    .body(String.class);
+        } catch (RestClientException e) {
+            throw new RestException("Failed to perform get decks REST call.", e.getMessage());
+        }
 
         try {
             AnkiResponse<List<AnkiDeck>> response = mapper.readValue(res, new TypeReference<AnkiResponse<List<AnkiDeck>>>() {
             });
             return response.result;
-
         } catch (JsonProcessingException e) {
+            // this means a malformed response from the client need to log the input to the llm and the output.
             log.error("Failed to process JSON: {}", e.getMessage(), e);
             return Collections.emptyList();
         }
@@ -61,19 +66,25 @@ public class AnkiService {
         params.put("notes", new long[]{noteId});
         action.setParams(params);
 
-        var res = ankiClient.post()
-                .uri("")
-                .body(action.toJsonString())
-                .retrieve()
-                .body(String.class);
+        String res;
+        try {
+            res = ankiClient.post()
+                    .uri("")
+                    .body(action.toJsonString())
+                    .retrieve()
+                    .body(String.class);
+        } catch (RestClientException e) {
+            throw new RestException("Fail to perform get note card REST call.", e.getMessage());
+        }
 
         try {
             AnkiResponse<List<AnkiNoteCardFull>> response = mapper.readValue(res, new TypeReference<AnkiResponse<List<AnkiNoteCardFull>>>() {
             });
             var note = ankiMapper.mapToAnkiNoteCards(response.result);
             return note.getFirst();
-
+            // this means a malformed response from the client need to log the input to the llm and the output.
         } catch (JsonProcessingException e) {
+            // this means a malformed response from the client need to log the input to the llm and the output.
             log.error("Failed to process JSON: {}", e.getMessage(), e);
             return null;
         }
@@ -86,22 +97,28 @@ public class AnkiService {
         params.put("notes", noteCardIds);
         action.setParams(params);
 
-        var res = ankiClient.post()
-                .uri("")
-                .body(action.toJsonString())
-                .retrieve()
-                .body(String.class);
+        String res;
+        try {
+            res = ankiClient.post()
+                    .uri("")
+                    .body(action.toJsonString())
+                    .retrieve()
+                    .body(String.class);
+        } catch (RestClientException e) {
+            throw new RestException("Failed to perform get note cards REST call.", e.getMessage());
+        }
 
         try {
             AnkiResponse<List<AnkiNoteCardFull>> response = mapper.readValue(res, new TypeReference<AnkiResponse<List<AnkiNoteCardFull>>>() {
             });
-            if(response.result.size() == 1 && response.result.getFirst().getNoteId() == 0){
+            if (response.result.size() == 1 && response.result.getFirst().getNoteId() == 0) {
                 log.error("Failed to get NoteCard: {}", response.error);
                 return Collections.emptyList();
             }
             return ankiMapper.mapToAnkiNoteCards(response.result);
 
         } catch (JsonProcessingException e) {
+            // this means a malformed response from the client need to log the input to the llm and the output.
             log.error("Failed to process JSON: {}", e.getMessage(), e);
             return Collections.emptyList();
         }
@@ -114,11 +131,16 @@ public class AnkiService {
         params.put("query", "deck:" + deckName);
         action.setParams(params);
 
-        var res = ankiClient.post()
-                .uri("")
-                .body(action.toJsonString())
-                .retrieve()
-                .body(String.class);
+        String res;
+        try {
+            res = ankiClient.post()
+                    .uri("")
+                    .body(action.toJsonString())
+                    .retrieve()
+                    .body(String.class);
+        } catch (RestClientException e) {
+            throw new RestException("Failed to perform get all note ids REST call.", e.getMessage());
+        }
 
         try {
             AnkiResponse<List<Long>> ankiRes = mapper.readValue(res, new TypeReference<AnkiResponse<List<Long>>>() {
@@ -128,7 +150,6 @@ public class AnkiService {
                 log.error("Failed to update NoteCard: {}", ankiRes.getError());
                 return Collections.emptyList();
             }
-
             return ankiRes.getResult();
 
         } catch (JsonProcessingException e) {
@@ -144,11 +165,16 @@ public class AnkiService {
         params.put("query", "deck:" + deckName);
         action.setParams(params);
 
-        var res = ankiClient.post()
-                .uri("")
-                .body(action.toJsonString())
-                .retrieve()
-                .body(String.class);
+        String res;
+        try{
+            res = ankiClient.post()
+                    .uri("")
+                    .body(action.toJsonString())
+                    .retrieve()
+                    .body(String.class);
+        }catch (RestClientException e){
+            throw new RestException("Failed to get note card ids REST call.",e.getMessage());
+        }
 
         try {
             AnkiResponse<List<Long>> ankiRes = mapper.readValue(res, new TypeReference<AnkiResponse<List<Long>>>() {
@@ -160,7 +186,6 @@ public class AnkiService {
             }
 
             var limitedIds = ankiRes.getResult();
-
             return ankiRes.getResult().subList(0, Math.min(limitedIds.size(), limit));
         } catch (JsonProcessingException e) {
             log.error("Failed to process JSON: {}", e.getMessage(), e);
@@ -170,18 +195,22 @@ public class AnkiService {
 
     public AnkiNoteCard updateNote(AnkiNoteCard noteCard) {
         AnkiNoteUpdateReq updateModel = ankiMapper.mapToAnkiUpdateReq(noteCard);
-
         var action = new AnkiAction("updateNote");
-        Map<String, Object> params = new HashMap<>();
 
+        Map<String, Object> params = new HashMap<>();
         params.put("note", updateModel);
         action.setParams(params);
 
-        var res = ankiClient.post()
-                .uri("")
-                .body(action.toJsonString())
-                .retrieve()
-                .body(String.class);
+        String res;
+        try{
+            res = ankiClient.post()
+                    .uri("")
+                    .body(action.toJsonString())
+                    .retrieve()
+                    .body(String.class);
+        }catch (RestClientException e){
+            throw new RestException("Failed to perform update note REST call.",e.getMessage());
+        }
 
         try {
             AnkiResponse<String> ankiRes = mapper.readValue(res, new TypeReference<AnkiResponse<String>>() {
@@ -191,8 +220,7 @@ public class AnkiService {
                 log.error("Failed to update NoteCard: {}", ankiRes.getError());
                 return null;
             }
-
-            // AnkiConnect Returns Null on 200. Returning model to simulate success. This will be wrapped at a later time.
+            // AnkiConnect Returns Null on 200. Returning model to simulate success.
             return noteCard;
 
         } catch (JsonProcessingException e) {
@@ -204,22 +232,20 @@ public class AnkiService {
     public List<Long> createNoteCards(List<AnkiNoteCard> noteCards, String deckName) {
         List<AnkiCreateRequest> createRequest = ankiMapper.mapToAnkiCreateReqs(noteCards, deckName);
         var action = new AnkiAction("addNotes");
-        Map<String, Object> params = new HashMap<>();
 
+        Map<String, Object> params = new HashMap<>();
         params.put("notes", createRequest);
         action.setParams(params);
-        
-        String res = "";
-        try{
+
+        String res;
+        try {
             res = ankiClient.post()
                     .uri("")
                     .body(action.toJsonString())
                     .retrieve()
                     .body(String.class);
-            
-        }catch (Exception e){
-            log.error("Failed to post to AI endpoint: {}",e);
-            return Collections.emptyList();
+        } catch (RestClientException e) {
+            throw new RestException("Failed to perform create note cards REST call.", e.getMessage());
         }
 
         try {
@@ -233,8 +259,7 @@ public class AnkiService {
                 log.error("Failed to create NoteCard: {}", ankiRes.getError());
                 return Collections.emptyList();
             }
-
-            // AnkiConnect Returns Null on 200. Returning model to simulate success. This will be wrapped at a later time.
+            // AnkiConnect Returns Null on 200. Returning model to simulate success.
             return ankiRes.getResult();
 
         } catch (JsonProcessingException e) {
@@ -250,16 +275,15 @@ public class AnkiService {
         params.put("query", String.format("deck:%s %s", deckName, query));
         action.setParams(params);
 
-        String res = "";
+        String res;
         try {
             res = ankiClient.post()
                     .uri("")
                     .body(action.toJsonString())
                     .retrieve()
                     .body(String.class);
-        } catch (Exception e) {
-            log.error("Failed to search notes: {}", e);
-            throw new SearchException("Failed to search notes");
+        } catch (RestClientException e) {
+            throw new RestException("Failed perform to search notes REST call.", e.getMessage());
         }
 
         try {

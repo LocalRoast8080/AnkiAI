@@ -1,4 +1,4 @@
-package com.example.ankiai.execptions;
+package com.example.ankiai.exceptions;
 
 public class EmptyFileException extends RuntimeException{
 

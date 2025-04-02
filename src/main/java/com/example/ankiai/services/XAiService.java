@@ -1,6 +1,6 @@
 package com.example.ankiai.services;
 
-import com.example.ankiai.execptions.AiException;
+import com.example.ankiai.exceptions.RestException;
 import com.example.ankiai.models.AiMessageRequest;
 import com.example.ankiai.models.AiResponseMessage;
 import com.example.ankiai.models.AnkiNoteCard;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 
 import java.util.List;
 
@@ -102,9 +103,8 @@ public class XAiService {
                     .body(req)
                     .retrieve()
                     .body(AiResponseMessage.class);
-        } catch (Exception e) {
-            log.error("Failed Expand Notes {}:", e);
-            return null;
+        } catch (RestClientException e) {
+            throw new RestException("Fail to perform expand notes REST call.",e.getMessage());
         }
     }
 
@@ -121,14 +121,12 @@ public class XAiService {
                     .retrieve()
                     .body(AiResponseMessage.class);
 
-        } catch (Exception e) {
-            throw new AiException("Failed spell checking try again");
+        } catch (RestClientException e) {
+            throw new RestException("Failed to perform spell check notes REST call.", e.getMessage());
         }
     }
 
     public AiResponseMessage generateCards(String text){
-        // validate this is a correct input type.
-
         var req = new AiMessageRequest(generateCards, text);
 
         try {
@@ -139,8 +137,8 @@ public class XAiService {
                     .retrieve()
                     .body(AiResponseMessage.class);
 
-        } catch (Exception e) {
-            throw new AiException("Failed to generate cards validate input and try again.");
+        } catch (RestClientException e) {
+            throw new RestException("Failed to perform generate cards REST call.", e.getMessage());
         }
     }
 }
